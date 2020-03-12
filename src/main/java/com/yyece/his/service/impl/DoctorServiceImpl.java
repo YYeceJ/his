@@ -29,4 +29,8 @@ public class DoctorServiceImpl extends ServiceImpl<DoctorDao, Doctor> implements
     public List<Map<String, Object>> getDoctorRoles(int doctorId){
         return doctorDao.getDoctorRoles(doctorId);
     }
+
+    public List<Map<String, Object>> getRoleAuth(int roleId){
+        return doctorDao.getRoleAuth(roleId);
+    }
 }

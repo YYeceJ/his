@@ -2,8 +2,7 @@ package com.yyece.his.utils;
 
 import org.springframework.cglib.beans.BeanMap;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class BeanMapUtils {
 

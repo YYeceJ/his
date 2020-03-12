@@ -17,4 +17,6 @@ public interface DoctorService extends IService<Doctor> {
     Doctor findDoctorByAccount(String account);
 
     List<Map<String, Object>> getDoctorRoles(int doctorId);
+
+    List<Map<String, Object>> getRoleAuth(int roleId);
 }

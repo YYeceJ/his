@@ -20,9 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * (Doctor)表控制层
@@ -123,19 +121,27 @@ public class DoctorController extends BaseController {
         String doctorId = claims.getId();
         //获取用户信息
         Doctor doctor = doctorService.findDoctorByAccount(account);
-        JSONObject jo = new JSONObject();
-        Map<String,Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         List<Map<String, Object>> roles = doctorService.getDoctorRoles(Integer.parseInt(doctorId));
-        //根据不同的用户级别获取用户角色
-        map.put("doctorid",doctor.getDoctorid());
-        map.put("account",doctor.getAccount());
-        map.put("doctorname",doctor.getDoctorname());
-        map.put("skilledfield",doctor.getSkilledfield());
-        map.put("departmentid",doctor.getDepartmentid());
-        map.put("departmentname",doctor.getDepartmentname());
-        map.put("doctortitle",doctor.getDoctortitle());
-        map.put("practiceexperience",doctor.getPracticeexperience());
-        map.put("roles",roles);
+        Set authSet = new HashSet();
+
+        for (Map<String, Object> role : roles) {
+            List<Map<String, Object>> auths = doctorService.getRoleAuth((Integer) role.get("roleId"));
+            for (Map<String, Object> auth : auths) {
+                authSet.add(auth);
+            }
+        }
+
+        map.put("doctorid", doctor.getDoctorid());
+        map.put("account", doctor.getAccount());
+        map.put("doctorname", doctor.getDoctorname());
+        map.put("skilledfield", doctor.getSkilledfield());
+        map.put("departmentid", doctor.getDepartmentid());
+        map.put("departmentname", doctor.getDepartmentname());
+        map.put("doctortitle", doctor.getDoctortitle());
+        map.put("practiceexperience", doctor.getPracticeexperience());
+        map.put("roles", roles);
+        map.put("auth", authSet);
         return new Result(ResultCode.SUCCESS, map);
     }
 }
