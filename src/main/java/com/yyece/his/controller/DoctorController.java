@@ -1,7 +1,6 @@
 package com.yyece.his.controller;
 
 
-
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.api.ApiController;
 import com.baomidou.mybatisplus.extension.api.R;
@@ -10,6 +9,7 @@ import com.yyece.his.entity.*;
 import com.yyece.his.interceptor.JwtInterceptor;
 import com.yyece.his.service.DoctorService;
 import com.yyece.his.utils.JwtUtils;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +47,7 @@ public class DoctorController extends BaseController {
     /**
      * 分页查询所有数据
      *
-     * @param page 分页对象
+     * @param page   分页对象
      * @param doctor 查询实体
      * @return 所有数据
      */
@@ -101,29 +101,41 @@ public class DoctorController extends BaseController {
     }
 
     @PostMapping("/login")
-    public Result login(@RequestBody Map<String,String> loginMap) {
+    public Result login(@RequestBody Map<String, String> loginMap) {
         String account = loginMap.get("account");
         String password = loginMap.get("password");
         Doctor doctor = doctorService.findDoctorByAccount(account);
         System.out.println(doctor);
         //登录失败
-        if(doctor == null || !doctor.getPassword().equals(password)) {
+        if (doctor == null || !doctor.getPassword().equals(password)) {
             return new Result(ResultCode.MOBILEORPASSWORDERROR);
-        }else {
-            Map<String,Object> map = new HashMap<>();
+        } else {
+            Map<String, Object> map = new HashMap<>();
             String token = jwtUtils.createJwt(doctor.getDoctorid().toString(), doctor.getAccount(), map);
-            return new Result(ResultCode.SUCCESS,token);
+            return new Result(ResultCode.SUCCESS, token);
         }
     }
 
-    @RequestMapping(value="/profile",method = RequestMethod.GET)
+    @RequestMapping(value = "/profile", method = RequestMethod.GET)
     public Result profile(HttpServletRequest request) throws Exception {
 
-        String userid = claims.getId();
-        log.info("------------------------------claims"+claims.toString());
+        String account = claims.getSubject();
+        String doctorId = claims.getId();
         //获取用户信息
-        Doctor doctor = doctorService.getById(userid);
+        Doctor doctor = doctorService.findDoctorByAccount(account);
+        JSONObject jo = new JSONObject();
+        Map<String,Object> map = new HashMap<>();
+        List<Map<String, Object>> roles = doctorService.getDoctorRoles(Integer.parseInt(doctorId));
         //根据不同的用户级别获取用户角色
-        return new Result(ResultCode.SUCCESS,doctor);
+        map.put("doctorid",doctor.getDoctorid());
+        map.put("account",doctor.getAccount());
+        map.put("doctorname",doctor.getDoctorname());
+        map.put("skilledfield",doctor.getSkilledfield());
+        map.put("departmentid",doctor.getDepartmentid());
+        map.put("departmentname",doctor.getDepartmentname());
+        map.put("doctortitle",doctor.getDoctortitle());
+        map.put("practiceexperience",doctor.getPracticeexperience());
+        map.put("roles",roles);
+        return new Result(ResultCode.SUCCESS, map);
     }
 }

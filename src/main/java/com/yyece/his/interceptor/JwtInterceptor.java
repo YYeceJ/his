@@ -49,7 +49,6 @@ public class JwtInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // 1.通过request获取请求token信息
         String authorization = request.getHeader("Authorization");
-        log.info("Authorization" + authorization);
         //判断请求头信息是否为空，或者是否已Bearer开头
         if (!StringUtils.isEmpty(authorization) && authorization.startsWith("Bearer")) {
             //获取token数据
@@ -60,15 +59,13 @@ public class JwtInterceptor extends HandlerInterceptorAdapter {
             HandlerMethod h = (HandlerMethod) handler;
             //获取接口上的reqeustmapping注解
             RequestMapping annotation = h.getMethodAnnotation(RequestMapping.class);
-            log.info("ooooooooooooooooooooooooooooooooooooooooooooo");
             //获取当前请求接口中的name属性
             if (claims != null) {
-                log.info("jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj" + claims.toString());
                 request.setAttribute("user_claims", claims);
             } else {
                 throw new CommonException(ResultCode.UNAUTHORISE);
             }
         }
-        return false;
+        return true;
     }
 }

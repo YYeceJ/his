@@ -2,6 +2,10 @@ package com.yyece.his.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yyece.his.entity.Doctor;
+import com.yyece.his.entity.Role;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * (Doctor)表服务接口
@@ -11,4 +15,6 @@ import com.yyece.his.entity.Doctor;
  */
 public interface DoctorService extends IService<Doctor> {
     Doctor findDoctorByAccount(String account);
+
+    List<Map<String, Object>> getDoctorRoles(int doctorId);
 }

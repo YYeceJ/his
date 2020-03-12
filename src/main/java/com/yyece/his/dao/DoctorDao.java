@@ -2,8 +2,12 @@ package com.yyece.his.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.yyece.his.entity.Doctor;
+import com.yyece.his.entity.Role;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * (Doctor)表数据库访问层
@@ -15,6 +19,9 @@ public interface DoctorDao extends BaseMapper<Doctor> {
 
     /*
      * 根据account查询doctor*/
-    @Select("SELECT * FROM doctor WHERE account =  #{account}")
+    @Select("SELECT * FROM doctor WHERE account =  #{account} and isDeleted = 0")
     Doctor findDoctorByAccount(@Param("account") String account);
+
+    @Select("SELECT r.roleId,r.roleName FROM doctor d ,role r ,doctor_role_relation dr WHERE d.doctorId = dr.doctorId and dr.roleId = r.roleId and d.doctorId = #{doctorId} and d.isDeleted = 0")
+    List<Map<String, Object>> getDoctorRoles(@Param("doctorId") int doctorId);
 }

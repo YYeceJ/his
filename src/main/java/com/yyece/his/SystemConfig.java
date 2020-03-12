@@ -1,6 +1,9 @@
 package com.yyece.his;
 
+import com.yyece.his.controller.DoctorController;
 import com.yyece.his.interceptor.JwtInterceptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -11,6 +14,8 @@ public class SystemConfig extends WebMvcConfigurationSupport {
 
     @Autowired
     private JwtInterceptor jwtInterceptor;
+
+    private static final Logger log = LoggerFactory.getLogger(SystemConfig.class);
 
     /**
      * 添加拦截器的配置

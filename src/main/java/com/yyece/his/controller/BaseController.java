@@ -29,9 +29,6 @@ public class BaseController extends ApiController {
         this.response = response;
 
         Object obj = request.getAttribute("user_claims");
-        log.info("---------------------eeeeeeeeeeeeeeeeeeee----------------------------");
-        log.info((String)obj);
-
         if(obj != null) {
             this.claims = (Claims) obj;
             this.doctorid = (String)claims.get("doctorid");
