@@ -53,6 +53,7 @@ public class JwtInterceptor extends HandlerInterceptorAdapter {
         if (!StringUtils.isEmpty(authorization) && authorization.startsWith("Bearer")) {
             //获取token数据
             String token = authorization.replace("Bearer ", "");
+            log.info("====token====="+token);
             //解析token获取claims
             Claims claims = jwtUtils.parseJwt(token);
             //通过handler

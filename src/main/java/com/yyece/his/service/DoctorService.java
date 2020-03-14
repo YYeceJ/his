@@ -2,7 +2,6 @@ package com.yyece.his.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yyece.his.entity.Doctor;
-import com.yyece.his.entity.Role;
 
 import java.util.List;
 import java.util.Map;
@@ -19,4 +18,10 @@ public interface DoctorService extends IService<Doctor> {
     List<Map<String, Object>> getDoctorRoles(int doctorId);
 
     List<Map<String, Object>> getRoleAuth(int roleId);
+
+    boolean modify(Map<String, Object> map);
+
+    boolean deleteByDoctorId(Map<String, Object> map);
+
+    boolean saveDoctor(Map<String, Object> map);
 }

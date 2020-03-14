@@ -8,7 +8,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yyece.his.entity.*;
 import com.yyece.his.interceptor.JwtInterceptor;
 import com.yyece.his.service.DoctorService;
+import com.yyece.his.utils.IdWorker;
 import com.yyece.his.utils.JwtUtils;
+import org.apache.ibatis.annotations.Options;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.*;
 
 /**
@@ -30,6 +33,7 @@ import java.util.*;
  */
 @RestController
 @RequestMapping("doctor")
+@CrossOrigin
 public class DoctorController extends BaseController {
     /**
      * 服务对象
@@ -42,10 +46,13 @@ public class DoctorController extends BaseController {
     @Autowired
     private JwtUtils jwtUtils;
 
+    @Autowired
+    private IdWorker idWorker;
+
     /**
      * 分页查询所有数据
      *
-     * @param page   分页对象
+     * @param
      * @param doctor 查询实体
      * @return 所有数据
      */
@@ -76,6 +83,19 @@ public class DoctorController extends BaseController {
         return success(this.doctorService.save(doctor));
     }
 
+    @PostMapping("/save")
+    public Result saveDoctor(@RequestBody Map<String, Object> map) {
+        String account = "dr" + idWorker.nextId();
+        log.info("=======account================" + account);
+        map.put("account",account);
+        boolean result = doctorService.saveDoctor(map);
+        if (result) {
+            return new Result(ResultCode.SUCCESS);
+        } else {
+            return new Result(ResultCode.FAIL);
+        }
+    }
+
     /**
      * 修改数据
      *
@@ -87,23 +107,44 @@ public class DoctorController extends BaseController {
         return success(this.doctorService.updateById(doctor));
     }
 
-    /**
-     * 删除数据
-     *
-     * @param idList 主键结合
-     * @return 删除结果
-     */
-    @DeleteMapping
-    public R delete(@RequestParam("idList") List<Long> idList) {
-        return success(this.doctorService.removeByIds(idList));
+    @PostMapping("/modify")
+    public Result modify(@RequestBody Map<String, Object> map) {
+        boolean result = doctorService.modify(map);
+        if (result) {
+            return new Result(ResultCode.SUCCESS);
+        } else {
+            return new Result(ResultCode.FAIL);
+        }
     }
+
+    @Options(useGeneratedKeys = false)
+    @PostMapping("/delete")
+    public Result deleteByDoctorId(@RequestBody Map<String, Object> map) {
+        boolean result = doctorService.deleteByDoctorId(map);
+        if (result) {
+            return new Result(ResultCode.SUCCESS);
+        } else {
+            return new Result(ResultCode.FAIL);
+        }
+    }
+
+//    /**
+//     * 删除数据
+//     *
+//     * @param idList 主键结合
+//     * @return 删除结果
+//     */
+//    @DeleteMapping
+//    public R delete(@RequestParam("idList") List<Long> idList) {
+//        return success(this.doctorService.removeByIds(idList));
+//    }
 
     @PostMapping("/login")
     public Result login(@RequestBody Map<String, String> loginMap) {
         String account = loginMap.get("account");
         String password = loginMap.get("password");
         Doctor doctor = doctorService.findDoctorByAccount(account);
-        System.out.println(doctor);
+        log.info("doctor.getAccount()=======" + doctor);
         //登录失败
         if (doctor == null || !doctor.getPassword().equals(password)) {
             return new Result(ResultCode.MOBILEORPASSWORDERROR);

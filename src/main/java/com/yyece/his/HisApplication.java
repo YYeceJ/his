@@ -1,5 +1,6 @@
 package com.yyece.his;
 
+import com.yyece.his.utils.IdWorker;
 import com.yyece.his.utils.JwtUtils;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -17,5 +18,10 @@ public class HisApplication {
     @Bean
     public JwtUtils jwtUtils() {
         return new JwtUtils();
+    }
+
+    @Bean
+    public IdWorker idWorker() {
+        return new IdWorker();
     }
 }
