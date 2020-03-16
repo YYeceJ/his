@@ -58,7 +58,9 @@ public class DoctorController extends BaseController {
      */
     @GetMapping
     public R selectAll(Page<Doctor> page, Doctor doctor) {
-        return success(this.doctorService.page(page, new QueryWrapper<>(doctor)));
+        QueryWrapper<Doctor> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByAsc("doctorid");
+        return success(this.doctorService.page(page, queryWrapper));
     }
 
     /**
@@ -86,25 +88,13 @@ public class DoctorController extends BaseController {
     @PostMapping("/save")
     public Result saveDoctor(@RequestBody Map<String, Object> map) {
         String account = "dr" + idWorker.nextId();
-        log.info("=======account================" + account);
-        map.put("account",account);
+        map.put("account", account);
         boolean result = doctorService.saveDoctor(map);
         if (result) {
             return new Result(ResultCode.SUCCESS);
         } else {
             return new Result(ResultCode.FAIL);
         }
-    }
-
-    /**
-     * 修改数据
-     *
-     * @param doctor 实体对象
-     * @return 修改结果
-     */
-    @PutMapping
-    public R update(@RequestBody Doctor doctor) {
-        return success(this.doctorService.updateById(doctor));
     }
 
     @PostMapping("/modify")

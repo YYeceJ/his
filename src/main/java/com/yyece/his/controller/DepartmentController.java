@@ -7,12 +7,18 @@ import com.baomidou.mybatisplus.extension.api.ApiController;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yyece.his.entity.Department;
+import com.yyece.his.entity.Result;
+import com.yyece.his.entity.ResultCode;
 import com.yyece.his.service.DepartmentService;
+import com.yyece.his.utils.IdWorker;
+import org.apache.ibatis.annotations.Options;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 科室表(Department)表控制层
@@ -22,12 +28,15 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("department")
-public class DepartmentController extends ApiController {
+public class DepartmentController extends BaseController {
     /**
      * 服务对象
      */
     @Resource
     private DepartmentService departmentService;
+
+    @Autowired
+    private IdWorker idWorker;
 
     /**
      * 分页查询所有数据
@@ -83,5 +92,36 @@ public class DepartmentController extends ApiController {
     @DeleteMapping
     public R delete(@RequestParam("idList") List<Long> idList) {
         return success(this.departmentService.removeByIds(idList));
+    }
+
+    @PostMapping("/save")
+    public Result saveDepartment(@RequestBody Map<String, Object> map) {
+        boolean result = departmentService.saveDepartment(map);
+        if (result) {
+            return new Result(ResultCode.SUCCESS);
+        } else {
+            return new Result(ResultCode.FAIL);
+        }
+    }
+
+    @PostMapping("/modify")
+    public Result modifyDepartment(@RequestBody Map<String, Object> map) {
+        boolean result = departmentService.modifyDepartment(map);
+        if (result) {
+            return new Result(ResultCode.SUCCESS);
+        } else {
+            return new Result(ResultCode.FAIL);
+        }
+    }
+
+    @Options(useGeneratedKeys = false)
+    @PostMapping("/delete")
+    public Result deleteByDoctorId(@RequestBody Map<String, Object> map) {
+        boolean result = departmentService.deleteByDepartmentId(map);
+        if (result) {
+            return new Result(ResultCode.SUCCESS);
+        } else {
+            return new Result(ResultCode.FAIL);
+        }
     }
 }

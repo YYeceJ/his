@@ -1,16 +1,13 @@
 package com.yyece.his.entity;
 
-import java.util.Date;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import org.springframework.format.annotation.DateTimeFormat;
-
 import java.io.Serializable;
 
 /**
  * (Scheduling)表实体类
  *
  * @author makejava
- * @since 2020-03-11 06:54:48
+ * @since 2020-03-16 10:27:56
  */
 @SuppressWarnings("serial")
 public class Scheduling extends Model<Scheduling> {
@@ -34,15 +31,12 @@ public class Scheduling extends Model<Scheduling> {
     private Integer creatorid;
     
     private String creatorname;
-    
-    private Integer isdeleted;
     //日期
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date date;
+    private String date;
     
-    private Object starttime;
+    private String starttime;
     
-    private Object endtime;
+    private String endtime;
     
     private Integer patientid;
     
@@ -141,35 +135,27 @@ public class Scheduling extends Model<Scheduling> {
         this.creatorname = creatorname;
     }
 
-    public Integer getIsdeleted() {
-        return isdeleted;
-    }
-
-    public void setIsdeleted(Integer isdeleted) {
-        this.isdeleted = isdeleted;
-    }
-
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
-    public Object getStarttime() {
+    public String getStarttime() {
         return starttime;
     }
 
-    public void setStarttime(Object starttime) {
+    public void setStarttime(String starttime) {
         this.starttime = starttime;
     }
 
-    public Object getEndtime() {
+    public String getEndtime() {
         return endtime;
     }
 
-    public void setEndtime(Object endtime) {
+    public void setEndtime(String endtime) {
         this.endtime = endtime;
     }
 

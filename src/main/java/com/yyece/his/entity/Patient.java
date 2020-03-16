@@ -2,15 +2,13 @@ package com.yyece.his.entity;
 
 import java.util.Date;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import org.springframework.format.annotation.DateTimeFormat;
-
 import java.io.Serializable;
 
 /**
  * (Patient)表实体类
  *
  * @author makejava
- * @since 2020-03-10 22:24:52
+ * @since 2020-03-16 10:57:57
  */
 @SuppressWarnings("serial")
 public class Patient extends Model<Patient> {
@@ -25,14 +23,9 @@ public class Patient extends Model<Patient> {
     //性别，1表示女，2表示男
     private Integer gender;
     //出生日期
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthdate;
     //备注
     private String note;
-    //是否删除，0表示未删除，1表示已删除是
-    private Integer isdeleted;
-    //第一次挂号
-    private Date jointime;
 
 
     public Integer getPatientid() {
@@ -89,22 +82,6 @@ public class Patient extends Model<Patient> {
 
     public void setNote(String note) {
         this.note = note;
-    }
-
-    public Integer getIsdeleted() {
-        return isdeleted;
-    }
-
-    public void setIsdeleted(Integer isdeleted) {
-        this.isdeleted = isdeleted;
-    }
-
-    public Date getJointime() {
-        return jointime;
-    }
-
-    public void setJointime(Date jointime) {
-        this.jointime = jointime;
     }
 
     /**

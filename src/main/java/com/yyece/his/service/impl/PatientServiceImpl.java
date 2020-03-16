@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
  * (Patient)表服务实现类
  *
  * @author makejava
- * @since 2020-03-10 22:24:52
+ * @since 2020-03-16 10:57:58
  */
 @Service("patientService")
 public class PatientServiceImpl extends ServiceImpl<PatientDao, Patient> implements PatientService {
