@@ -1,18 +1,23 @@
 package com.yyece.his.controller;
 
 
-
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.api.ApiController;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.yyece.his.entity.Doctor;
 import com.yyece.his.entity.Patient;
+import com.yyece.his.entity.Result;
+import com.yyece.his.entity.ResultCode;
 import com.yyece.his.service.PatientService;
+import com.yyece.his.utils.JwtUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
-import java.util.List;
+import java.util.*;
 
 /**
  * (Patient)表控制层
@@ -22,17 +27,19 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("patient")
-public class PatientController extends ApiController {
+public class PatientController extends BaseController {
     /**
      * 服务对象
      */
     @Resource
     private PatientService patientService;
 
+    @Autowired
+    private JwtUtils jwtUtils   ;
     /**
      * 分页查询所有数据
      *
-     * @param page 分页对象
+     * @param page    分页对象
      * @param patient 查询实体
      * @return 所有数据
      */
@@ -84,4 +91,67 @@ public class PatientController extends ApiController {
     public R delete(@RequestParam("idList") List<Long> idList) {
         return success(this.patientService.removeByIds(idList));
     }
+
+
+    @PostMapping("/modify")
+    public Result modify(@RequestBody Map<String, Object> map) {
+        boolean result = patientService.modify(map);
+        if (result) {
+            return new Result(ResultCode.SUCCESS);
+        } else {
+            return new Result(ResultCode.FAIL);
+        }
+    }
+
+    @PostMapping("/register")
+    public Result saveDoctor(@RequestBody Map<String, Object> map) {
+        String phone = (String) map.get("phone");
+        Patient patient = patientService.findPatientByPhone(phone);
+        if (patient != null) {
+            return new Result(ResultCode.PATIENT_EXISTED);
+        } else {
+            boolean result = patientService.savePatient(map);
+            if (result) {
+                return new Result(ResultCode.SUCCESS);
+            } else {
+                return new Result(ResultCode.FAIL);
+            }
+        }
+
+    }
+
+    @PostMapping("/login")
+    public Result login(@RequestBody Map<String, String> loginMap) {
+        String phone = loginMap.get("phone");
+        String password = loginMap.get("password");
+        Patient patient = patientService.findPatientByPhone(phone);
+        //登录失败
+        if (patient == null) {
+            return new Result(ResultCode.NOTFOUND_PATIENT);
+        } else if (!patient.getPassword().equals(password)) {
+            return new Result(ResultCode.MOBILEORPASSWORDERROR);
+        } else {
+            Map<String, Object> map = new HashMap<>();
+            String token = jwtUtils.createJwt(patient.getPatientid().toString(), patient.getPhone(), map);
+            return new Result(ResultCode.SUCCESS, token);
+        }
+    }
+
+    @RequestMapping(value = "/profile", method = RequestMethod.GET)
+    public Result profile(HttpServletRequest request) throws Exception {
+
+        String phone = claims.getSubject();
+        String patientid = claims.getId();
+        //获取用户信息
+        Patient patient = patientService.findPatientByPhone(phone);
+        Map<String, Object> map = new HashMap<>();
+
+        map.put("patientId", patientid);
+        map.put("phone", phone);
+        map.put("patientName", patient.getPatientname());
+        map.put("birthDate", patient.getBirthdate());
+        map.put("gender", patient.getGender());
+        return new Result(ResultCode.SUCCESS, map);
+    }
+
 }

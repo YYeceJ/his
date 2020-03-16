@@ -6,12 +6,15 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.api.ApiController;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.yyece.his.entity.Patient;
 import com.yyece.his.entity.Result;
 import com.yyece.his.entity.ResultCode;
 import com.yyece.his.entity.Scheduling;
+import com.yyece.his.service.PatientService;
 import com.yyece.his.service.SchedulingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -36,6 +39,9 @@ public class SchedulingController extends BaseController {
     @Resource
     private SchedulingService schedulingService;
 
+    @Autowired
+    PatientService patientService;
+
     private static final Logger log = LoggerFactory.getLogger(SchedulingController.class);
 
 //    /**
@@ -58,11 +64,11 @@ public class SchedulingController extends BaseController {
 //    }
 
     @GetMapping
-    public Result querySchedulingByParam(Scheduling scheduling){
+    public Result querySchedulingByParam(Scheduling scheduling) {
         JSONObject jsonObject = new JSONObject();
-        log.info("===========scheduling=========="+jsonObject.toJSONString(scheduling));
+        log.info("===========scheduling==========" + jsonObject.toJSONString(scheduling));
         List<Scheduling> schedulings = schedulingService.querySchedulingByParam(scheduling);
-        return new Result(ResultCode.SUCCESS,schedulings);
+        return new Result(ResultCode.SUCCESS, schedulings);
     }
 
     /**

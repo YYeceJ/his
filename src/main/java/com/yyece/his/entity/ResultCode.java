@@ -17,9 +17,12 @@ public enum ResultCode {
     UNAUTHENTICATED(false,10002,"您还未登录"),
     UNAUTHORISE(false,10003,"权限不足"),
     SERVER_ERROR(false,99999,"抱歉，系统繁忙，请稍后重试！"),
-
+    NOTFOUND_PATIENT(false,20002,"抱歉，找不到病人"),
+    PATIENT_EXISTED(false,20002,"用户已存在"),
     //---用户操作返回码  2xxxx----
     MOBILEORPASSWORDERROR(false,20001,"用户名或密码错误");
+
+
 
     //---企业操作返回码  3xxxx----
     //---权限操作返回码----

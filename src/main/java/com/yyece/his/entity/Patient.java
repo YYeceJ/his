@@ -1,6 +1,5 @@
 package com.yyece.his.entity;
 
-import java.util.Date;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import java.io.Serializable;
 
@@ -8,7 +7,7 @@ import java.io.Serializable;
  * (Patient)表实体类
  *
  * @author makejava
- * @since 2020-03-16 10:57:57
+ * @since 2020-03-16 11:20:18
  */
 @SuppressWarnings("serial")
 public class Patient extends Model<Patient> {
@@ -23,7 +22,7 @@ public class Patient extends Model<Patient> {
     //性别，1表示女，2表示男
     private Integer gender;
     //出生日期
-    private Date birthdate;
+    private String birthdate;
     //备注
     private String note;
 
@@ -68,11 +67,11 @@ public class Patient extends Model<Patient> {
         this.gender = gender;
     }
 
-    public Date getBirthdate() {
+    public String getBirthdate() {
         return birthdate;
     }
 
-    public void setBirthdate(Date birthdate) {
+    public void setBirthdate(String birthdate) {
         this.birthdate = birthdate;
     }
 
