@@ -55,7 +55,7 @@ public interface SchedulingDao extends BaseMapper<Scheduling> {
             "<when test='doctorid != null'> and doctorId = #{doctorid} </when> " +
             "<when test='patientid != null'> and patientId = #{patientid} </when> " +
             "<when test='status != null'> and status = #{status} </when> " +
-            "<when test='doctorname != null'> and doctorName like '% #{doctorname} %' </when> " +
+            "<when test='doctorname != null'> and doctorName like CONCAT('%',#{doctorname},'%')  </when> " +
             "<when test='date != null'> and date = #{date} </when> " +
             "</script>")
     List<Scheduling> querySchedulingByParam(Scheduling scheduling);
