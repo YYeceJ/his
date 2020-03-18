@@ -151,6 +151,7 @@ public class PatientController extends BaseController {
         map.put("patientName", patient.getPatientname());
         map.put("birthDate", patient.getBirthdate());
         map.put("gender", patient.getGender());
+        map.put("password", patient.getPassword());
         return new Result(ResultCode.SUCCESS, map);
     }
 

@@ -19,8 +19,7 @@ public interface PatientDao extends BaseMapper<Patient> {
     @Select("SELECT *  FROM patient WHERE phone = #{phone}")
     Patient findPatientByPhone(String phone);
 
-    @Update("UPDATE patient SET phone=#{phone},patientName =#{patientName}," +
-            "gender=#{gender},birthDate=#{birthDate},password=#{password}," +
+    @Update("UPDATE patient SET patientName =#{patientName},gender=#{gender}, birthDate=#{birthDate}" +
             "WHERE patientId = #{patientId}")
     boolean modify(Map<String, Object> map);
 

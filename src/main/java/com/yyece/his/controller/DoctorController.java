@@ -58,8 +58,8 @@ public class DoctorController extends BaseController {
      */
     @GetMapping
     public R selectAll(Page<Doctor> page, Doctor doctor) {
-        QueryWrapper<Doctor> queryWrapper = new QueryWrapper<>();
-        queryWrapper.orderByAsc("doctorid");
+        QueryWrapper queryWrapper = new QueryWrapper<>(doctor);
+        queryWrapper.eq("isdeleted",0);
         return success(this.doctorService.page(page, queryWrapper));
     }
 
@@ -117,17 +117,6 @@ public class DoctorController extends BaseController {
             return new Result(ResultCode.FAIL);
         }
     }
-
-//    /**
-//     * 删除数据
-//     *
-//     * @param idList 主键结合
-//     * @return 删除结果
-//     */
-//    @DeleteMapping
-//    public R delete(@RequestParam("idList") List<Long> idList) {
-//        return success(this.doctorService.removeByIds(idList));
-//    }
 
     @PostMapping("/login")
     public Result login(@RequestBody Map<String, String> loginMap) {

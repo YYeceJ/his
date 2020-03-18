@@ -12,6 +12,8 @@ import com.yyece.his.entity.ResultCode;
 import com.yyece.his.service.DepartmentService;
 import com.yyece.his.utils.IdWorker;
 import org.apache.ibatis.annotations.Options;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +31,8 @@ import java.util.Map;
 @RestController
 @RequestMapping("department")
 public class DepartmentController extends BaseController {
+
+    private static final Logger log = LoggerFactory.getLogger(DepartmentController.class);
     /**
      * 服务对象
      */
@@ -47,7 +51,9 @@ public class DepartmentController extends BaseController {
      */
     @GetMapping
     public R selectAll(Page<Department> page, Department department) {
-        return success(this.departmentService.page(page, new QueryWrapper<>(department)));
+        QueryWrapper queryWrapper = new QueryWrapper<>(department);
+        queryWrapper.eq("isdeleted",0);
+        return success(this.departmentService.page(page, queryWrapper));
     }
 
     /**
@@ -117,6 +123,7 @@ public class DepartmentController extends BaseController {
     @Options(useGeneratedKeys = false)
     @PostMapping("/delete")
     public Result deleteByDoctorId(@RequestBody Map<String, Object> map) {
+        log.info("======map======"+map);
         boolean result = departmentService.deleteByDepartmentId(map);
         if (result) {
             return new Result(ResultCode.SUCCESS);

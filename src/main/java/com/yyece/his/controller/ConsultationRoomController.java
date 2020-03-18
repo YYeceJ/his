@@ -7,18 +7,22 @@ import com.baomidou.mybatisplus.extension.api.ApiController;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yyece.his.entity.ConsultationRoom;
+import com.yyece.his.entity.Result;
+import com.yyece.his.entity.ResultCode;
 import com.yyece.his.service.ConsultationRoomService;
+import org.apache.ibatis.annotations.Options;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 诊室(ConsultationRoom)表控制层
  *
  * @author makejava
- * @since 2020-03-10 22:55:44
+ * @since 2020-03-17 12:41:47
  */
 @RestController
 @RequestMapping("consultationRoom")
@@ -83,5 +87,36 @@ public class ConsultationRoomController extends ApiController {
     @DeleteMapping
     public R delete(@RequestParam("idList") List<Long> idList) {
         return success(this.consultationRoomService.removeByIds(idList));
+    }
+
+
+    @PostMapping("/save")
+    public Result saveDoctor(@RequestBody Map<String, Object> map) {
+        boolean result = consultationRoomService.saveRoom(map);
+        if (result) {
+            return new Result(ResultCode.SUCCESS);
+        } else {
+            return new Result(ResultCode.FAIL);
+        }
+    }
+
+    @PostMapping("/modify")
+    public Result modify(@RequestBody Map<String, Object> map) {
+        boolean result = consultationRoomService.modify(map);
+        if (result) {
+            return new Result(ResultCode.SUCCESS);
+        } else {
+            return new Result(ResultCode.FAIL);
+        }
+    }
+
+    @PostMapping("/delete")
+    public Result deleteByDoctorId(@RequestBody Map<String, Object> map) {
+        boolean result = consultationRoomService.deleteByRoomId(map);
+        if (result) {
+            return new Result(ResultCode.SUCCESS);
+        } else {
+            return new Result(ResultCode.FAIL);
+        }
     }
 }
