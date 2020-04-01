@@ -59,7 +59,7 @@ public class DoctorController extends BaseController {
     @GetMapping
     public R selectAll(Page<Doctor> page, Doctor doctor) {
         QueryWrapper queryWrapper = new QueryWrapper<>(doctor);
-        queryWrapper.eq("isdeleted",0);
+        queryWrapper.eq("isdeleted", 0);
         return success(this.doctorService.page(page, queryWrapper));
     }
 
@@ -91,7 +91,13 @@ public class DoctorController extends BaseController {
         map.put("account", account);
         boolean result = doctorService.saveDoctor(map);
         if (result) {
-            return new Result(ResultCode.SUCCESS);
+            Doctor doctor = doctorService.findDoctorByAccount(account);
+            boolean setDoctorRoleResult = doctorService.setDoctorRole(doctor.getDoctorid());
+            if (setDoctorRoleResult) {
+                return new Result(ResultCode.SUCCESS);
+            } else {
+                return new Result(ResultCode.FAIL);
+            }
         } else {
             return new Result(ResultCode.FAIL);
         }

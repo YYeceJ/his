@@ -50,4 +50,9 @@ public class DoctorServiceImpl extends ServiceImpl<DoctorDao, Doctor> implements
     public boolean saveDoctor(Map<String, Object> map) {
         return doctorDao.saveDoctor(map);
     }
+
+    @Override
+    public boolean setDoctorRole(int doctorId) {
+        return doctorDao.setDoctorRole(doctorId);
+    }
 }

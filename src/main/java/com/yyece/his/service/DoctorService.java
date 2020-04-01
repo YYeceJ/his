@@ -24,4 +24,6 @@ public interface DoctorService extends IService<Doctor> {
     boolean deleteByDoctorId(Map<String, Object> map);
 
     boolean saveDoctor(Map<String, Object> map);
+
+    boolean setDoctorRole(int doctorId);
 }

@@ -39,4 +39,7 @@ public interface DoctorDao extends BaseMapper<Doctor> {
     @Insert("INSERT INTO doctor (account, doctorName,password,skilledField,departmentId,departmentName,doctorTitle,practiceExperience,isDeleted)" +
             "VALUES(#{account},#{doctorName},'welcome123',#{skilledField},#{departmentId},#{departmentName},#{doctorTitle},#{practiceExperience},0)")
     boolean saveDoctor(Map<String, Object> map);
+
+    @Insert("INSERT into doctor_role_relation (roleId,doctorId) VALUES (3,#{doctorId})")
+    boolean setDoctorRole(int doctorId);
 }
