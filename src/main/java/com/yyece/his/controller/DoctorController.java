@@ -129,7 +129,6 @@ public class DoctorController extends BaseController {
         String account = loginMap.get("account");
         String password = loginMap.get("password");
         Doctor doctor = doctorService.findDoctorByAccount(account);
-        log.info("doctor.getAccount()=======" + doctor);
         //登录失败
         if (doctor == null || !doctor.getPassword().equals(password)) {
             return new Result(ResultCode.MOBILEORPASSWORDERROR);
